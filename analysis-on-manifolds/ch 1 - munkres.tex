@@ -1,0 +1,195 @@
+
+\documentclass[10pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{tikz-cd}
+\usepackage{enumerate}
+\usepackage{xfrac}
+\usepackage{hyperref}
+\usepackage{unicode-math}
+\usepackage{mathtools}
+
+\newcommand{\cat}[1]{\bm{ \mathsf{#1} }}
+\newcommand{\functor}[3]{#1 : \cat{#2} \to \cat{#3}}
+\newcommand{\functordef}{\functor{F}{C}{D}}
+\newcommand{\cc}{\cat{C}}
+\newcommand{\dd}{\cat{D}}
+\newcommand{\ee}{\cat{E}}
+\newcommand{\subcat}[2]{\bm{ \mathsf{#1}}_{\bm{ \mathsf{#2}}}}
+\newcommand{\op}[1]{#1^{\text{op}}}
+\newcommand{\opc}{\op{\cc}}
+\newcommand{\opd}{\op{\dd}}
+\newcommand{\ope}{\op{\ee}}
+\newcommand{\mono}{\rightarrowtail}
+\newcommand{\epi}{\twoheadrightarrow}
+\newcommand{\bg}{\cat{BG}}
+\newcommand{\bgg}{\cat{BG'}}
+\newcommand{\nt}{\Rightarrow}
+\newcommand{\ant}[2]{\alpha : F \nt G} 
+\newcommand{\bnt}[2]{\beta : F \nt G} 
+\newcommand{\anti}[2]{\alpha : F \cong G} 
+\newcommand{\bnti}[2]{\beta : F \cong G} 
+\newcommand{\zero}{\mathbb{0}}
+\newcommand{\one}{\mathbb{1}}
+\newcommand{\two}{\mathbb{2}}
+\newcommand{\three}{\mathbb{3}}
+\newcommand{\innerprod}[2]{\langle #1, #2 \rangle}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert} 
+%SetFonts
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{problem}[theorem]{problem}
+%SetFonts
+
+\title{The Algebra and Topology of $\mathbb{R}^n$}
+\author{Emily Pillmore}
+%\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+\section{Review of Linear Algebra}
+
+This section was a quick review of linear algebra from Munkres' perspective. It delved into Vector spaces, linear transformations/isomorphisms, rank, transposition, matrices, inner-products and norms.
+
+\begin{problem}[Cauchy-Schwarz Inequality]
+
+Let $V$ be a vector space with inner product $\innerprod{x}{y}$ and norm $\norm{x} = \innerprod{x}{y}^{1/2}$.
+
+\begin{center}
+\begin{enumerate}[a)]
+	\item Prove the \textbf{Cauchy-Schwarz inequality}: $\innerprod{x}{y} \leq \norm{x}\norm{y}$. \textit{Hint:} If $x,y \neq 0$, set $c = 1/\norm{x}$ and $d = 1/\norm{y}$  and use the fact that $\norm{cx \pm dy} \geq 0$.
+	\item Prove that $\norm{x + y} \leq \norm{x} + \norm{y}$. \textit{Hint:} Compute $\innerprod{x + y}{x + y}$ and apply a).
+	\item Prove that $\norm{x - y} \geq \norm{x} + \norm{y}$
+\end{enumerate}
+\end{center}
+\end{problem}
+
+\begin{proof} (Cauchy-Schwarz Inequality.)
+
+\par
+
+\begin{enumerate}[a)]
+	\item We'll prove this using the hint. Consider the following:
+	\begin{equation} 
+		\begin{aligned}
+			\innerprod{x}{y} &\leq \norm{x}\norm{y} \\
+			\innerprod{x}{y}^2 &\leq \innerprod{x}{x}\innerprod{y}{y} \\
+			0 &\leq  \innerprod{x}{x} - \frac{\innerprod{x}{y}^2}{\innerprod{y}{y}}
+		\end{aligned}
+	\end{equation}
+	
+	Let $\eta = \frac{\innerprod{x}{y}}{\innerprod{y}{y}}$. Then, we have 
+	
+	\begin{equation}
+		\begin{aligned}
+			0 &\leq \innerprod{x}{x} - \eta\innerprod{x}{y} \\
+			 & \leq \innerprod{x}{x} - \eta\innerprod{y}{x} & \textit{symmetry of the symmetric bilinear form} \\
+			 & \leq \innerprod{x - \eta y}{x} \\
+		\end{aligned}
+	\end{equation}
+	Now, what the hint tells us is that if $\norm{ax - by} \geq 0$ then certainly $\innerprod{ax - by}{ax - by} = \norm{ax - by}^2 \geq 0$. So in order to make use of the hint, we need to relate $\innerprod{x - \eta y}{x} $ to something of that form.  We will show that $\innerprod{x - \eta y}{x} = \innerprod{x - \eta y}{x - \eta y}$. 
+	
+	\begin{equation}
+		\begin{aligned}
+			 \innerprod{x - \eta y}{x - \eta y}  &=  \innerprod{x - \eta y}{x} - \innerprod{x - \eta y}{- \eta y} \\
+			  &= \innerprod{x - \eta y}{x} + \eta \innerprod{x - \eta y}{y} \\
+			  &= \innerprod{x - \eta y}{x} + \eta (\innerprod{x}{y} - \eta \innerprod{y}{y}) \\
+			  &= \innerprod{x - \eta y}{x} + \eta (\innerprod{x}{y} - \innerprod{x}{y}) \\
+			  &=  \innerprod{x - \eta y}{x}
+	 	\end{aligned}
+	\end{equation}
+	Hence, $\innerprod{x - \eta y}{x}$ is equal to $\innerprod{x - \eta y}{x - \eta y}$, which is gauranteed to be $\geq 0$. It is 0 in the case where either $x$ or $y$ is 0, since $\innerprod{x}{y} \leq \norm{x}\norm{y}$ forces the equation to 0. 
+
+\item Consider the following: 
+
+	\begin{equation}
+		\begin{aligned}
+			\norm{x + y} &\leq \norm{x} + \norm{y} \\
+			\innerprod{x + y}{x + y} &\leq (\norm{x} + \norm{y})^2 \\
+			\innerprod{x + y}{x + y} &\leq \innerprod{x}{x} + 2\norm{x}\norm{y} + \innerprod{y}{y} \\
+			\innerprod{x}{x} + 2\innerprod{x}{y} + \innerprod{y}{y} &\leq \innerprod{x}{x} + 2\norm{x}\norm{y} + \innerprod{y}{y} \\
+			\innerprod{x}{y} &\leq \norm{x}\norm{y} 			
+		\end{aligned}
+	\end{equation}	
+	The final clause of the proof is precisely the Cauchy-Schwarz inequality.	
+	
+	\item Let's begin by considering the following: 
+	\begin{equation}
+		\begin{aligned}
+			\norm{x - y} &\geq \norm{x} - \norm{y} \\
+			\norm{x - y}^2 &\geq \innerprod{x}{x} - 2 \norm{x}\norm{y} + \innerprod{y}{y} \\ 
+			\innerprod{x - y}{x - y} & \geq \innerprod{x}{x} - 2 \norm{x}\norm{y} + \innerprod{y}{y}  \\
+			\innerprod{x}{x} - 2\innerprod{x}{y} + \innerprod{y}{y} &\geq \innerprod{x}{x} - 2 \norm{x}\norm{y} + \innerprod{y}{y}  \\
+			\norm{x}\norm{y} &\geq \innerprod{x}{y} 
+	 	\end{aligned}
+	\end{equation}
+	The last clause is again the Cauchy-Schwarz inequality.
+\end{enumerate}
+\end{proof}
+
+\begin{problem}[Matrix norm]
+
+If $A$ is an $n$ by $m$ matrix, and $B$ is an $m$ by $p$ matrix, show that 
+
+\begin{center}
+\begin{equation}
+	|A \cdot B| \leq m |A||B|
+\end{equation}
+\end{center}
+\end{problem}
+
+\begin{proof}
+Note first that by definition, $A \cdot B = \{ c_{ij} = \sum_{k = 1}^m a_{ik} \cdot b_{kj} \}$. Since each entry $a_{ik} \leq |A|$ and $b_{kj} \leq |B|$ by definition, we have the following: 
+
+\begin{equation}
+\begin{aligned}
+	|A \cdot B| &= \text{max}\{ |c_{ij}| : c_{ij} \sum_{k = 1}^m a_{ik} \cdot b_{kj} \} \\
+	&\leq \text{max}\{ |c_{ij}| : c_{ij} = \sum_{k = 1}^m |A| \cdot |B| \} \\
+	&\leq \text{max}\{ |c_{ij}| : c_{ij} = m |A| \cdot |B|\} \\
+	&\leq m |A|\cdot|B|
+\end{aligned} 
+\end{equation}
+
+Hence, $|A \cdot B| \leq m |A| \cdot |B|$.
+
+\end{proof}
+
+\begin{problem}[Sup norm]
+Show that the sup norm on $\mathbb{R}^2$ is not derived from the inner product on $\mathbb{R}^2$. Hint: Suppose $\innerprod{x}{y}$ is an inner product on $\mathbb{R}^2$ (\textit{not} the dot product) having the property that $|x| = \innerprod{x}{x}^{1/2}$ . Compute $\innerprod{x \pm y}{x \pm y}$ and apply the case $x = e_1$ and $y = e_2$.
+\end{problem}
+
+\begin{proof}
+
+To prove this, we will show a violation of the parallelogram law. Recall that a norm associated with an inner product must satisfy the following law for all $x, y \in \mathbb{R}^2$: 
+
+\begin{center}
+\begin{equation}
+ \norm{x + y}^2 + \norm{x - y}^2 = 2(\norm{x}^2 + \norm{y}^2)
+ \end{equation}
+ \end{center}
+ 
+ Consider the sup-norm. Using the parallelogram and plugging in the basis vectors $e_1$ and $e_2$ for $x$ and $y$, we have 
+ 
+ \begin{equation}
+ 	\begin{aligned}
+		| x + y |^2 + | x - y|^2 &= 2(|x|^2 + |y|^2) \\
+		| e_1 + e_2 |^2 + | e_1 - e_2|^2 &= 2(|e_1|^2 + |e_2|^2) \\
+		| (1,1) |^2 + |(1,-1)^2 &= 2(1 + 1) \\
+		1 + 1 &= 2(2) \\
+		2 &\neq 4
+	\end{aligned}
+ \end{equation} 
+ A contradiction. Hence, the sup-norm cannot be derived from an inner product.
+
+\end{proof}
+\end{document}  
